@@ -5,12 +5,15 @@
 axios
   .get('https://api.github.com/users/candaceyw')
   .then((res) => {
-    console.log(res)
+    // console.log(res)
     newComponent.appendChild(component(res.data))
-    
-    res.data.followers_url
-
   })
+  .catch((err) => {
+    console.log('You hit an error: ', err);
+  });
+
+  
+
 
 /* Step 2: Inspect and study the data coming back, this is YOUR 
    github info! You will need to understand the structure of this 
@@ -33,18 +36,66 @@ const newComponent = document.querySelector('.cards');
           Using that array, iterate over it, requesting data for each user, creating a new card for each
           user, and adding that card to the DOM.
 */
-
-const followersArray = ['galyonj', 'avpimblesr', 'Franzferdinan51', 'VictorSDelpiu', 'HeyMichelle'];
-
-followersArray.forEach((element) =>{
-axios
-  .get(`https://api.github.com/users/${element}`)
+axios.get('https://api.github.com/users/candaceyw/followers')
   .then((res) => {
-    newComponent.appendChild(component(res.data))
-   
+    const followersArray = res.data;
+    const followersList = followersArray.map((user) => {
+      return user.login;
+    });
+    console.log(followersList);
+    return followersList;
   })
+
+  .then((followersList) => {
+    followersList.forEach((user) => {
+    axios.get(`https://api.github.com/users/${user}`) 
+    .then((res) => {
+      const data = res.data;
+      const newCard = component(data);
+      newComponent.appendChild(newCard)
+    })    
+    })
+  })
+
+
+// })
+// axios
+//   .get('https://api.github.com/users/candaceyw')
+//   .then((res) => {
+//     console.log(res)
+//     return res.data.followers_url
+//   })
+
+//     .then((res) => {
+//       return axios.get(res)
+
+//       .then((res) => {
+//       res.data.forEach(newCards => {
+//         axios.get(newCards.url)
+
+//         .then((res)=>{
+//           newComponent.appendChild(component(res.data))
+//           })
+
+//         })
+//       })
+//     })
+//   .catch((err) => {
+//     console.log('You hit an error: ', err);
+//   });
+ 
+
+// const followersArray = ['galyonj', 'avpimblesr', 'Franzferdinan51', 'VictorSDelpiu', 'HeyMichelle'];
+
+// followersArray.forEach((element) =>{
+// axios
+//   .get(`https://api.github.com/users/${element}`)
+//   .then((res) => {
+//     newComponent.appendChild(component(res.data))
+   
+//   })
   
-})
+// })
 
 
 
