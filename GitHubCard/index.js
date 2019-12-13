@@ -6,8 +6,11 @@ axios
   .get('https://api.github.com/users/candaceyw')
   .then((res) => {
     console.log(res)
-  })
+    newComponent.appendChild(component(res.data))
+    
+    res.data.followers_url
 
+  })
 
 /* Step 2: Inspect and study the data coming back, this is YOUR 
    github info! You will need to understand the structure of this 
@@ -19,6 +22,7 @@ axios
 /* Step 4: Pass the data received from Github into your function, 
            create a new component and add it to the DOM as a child of .cards
 */
+const newComponent = document.querySelector('.cards');
 
 /* Step 5: Now that you have your own card getting added to the DOM, either 
           follow this link in your browser https://api.github.com/users/<Your github name>/followers 
@@ -30,7 +34,17 @@ axios
           user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+const followersArray = ['galyonj', 'avpimblesr', 'Franzferdinan51', 'VictorSDelpiu', 'HeyMichelle'];
+
+followersArray.forEach((element) =>{
+axios
+  .get(`https://api.github.com/users/${element}`)
+  .then((res) => {
+    newComponent.appendChild(component(res.data))
+   
+  })
+  
+})
 
 
 
@@ -78,7 +92,8 @@ function component(object){
   userName.textContent = object.login;
   location.textContent = `Location: ${object.location}`;
   profile.textContent = `Profile: `;
-  anchor.src = object.html_url;
+  anchor.href = object.html_url;
+  anchor.textContent = object.html_url;
   followers.textContent = `Followers: ${object.followers}`;
   following.textContent = `Following: ${object.following}`;
   userBio.textContent = `Bio: ${object.bio}`;
@@ -92,6 +107,7 @@ function component(object){
   cardInfo.appendChild(profile);
   profile.appendChild(anchor);
   cardInfo.appendChild(followers);
+  cardInfo.appendChild(following);
   cardInfo.appendChild(userBio);
 
 
